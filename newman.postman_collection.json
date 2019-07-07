@@ -1,0 +1,83 @@
+{
+	"info": {
+		"_postman_id": "e91a42ae-51e9-4b46-9e13-bc363cdbc81a",
+		"name": "newman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "新建主题",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7c3e6bdf-e5a6-4abc-a465-01ed7fa37a2b",
+						"exec": [
+							"// 从response中获取topic_id",
+							"// var data = JSON.parse(responseBody);    //把响应内容复制给data",
+							"// pm.environment.set(\"topic_id\", data.topic_id);  //用pm内置方法设置环境变量topic_id,并把响应中的topic_id的value赋值给它",
+							"",
+							"//pm是postman的缩写",
+							"",
+							"var status_code = pm.variables.get(\"except_status_code\")    //var是js声明变量的关键字,获取参数化csv文件中的内容",
+							"console.log(\"status_code\", status_code)     //js打印方法是console.log()",
+							"",
+							"var msg = pm.variables.get(\"except_msg\")    //var是js声明变量的关键字,获取参数化csv文件中的内容",
+							"console.log(\"msg\", msg)     //js打印方法是console.log()",
+							"",
+							"",
+							"",
+							"pm.test(\"断言状态码\"+status_code, function () {",
+							"    pm.response.to.have.status(status_code);",
+							"});",
+							"",
+							"pm.globals.set(\"variable_key\", \"variable_value\");",
+							"//test开头的相当于postman的单元测试",
+							"pm.test(\"断言json数据msg字段\"+msg, function () {        ",
+							"    var jsonData = pm.response.json();      //pm.response.json()服务器响应的信息转化为json数据",
+							"    console.log(\"jsonData\", jsonData)",
+							"    if(status_code != 200){",
+							"        pm.expect(jsonData[\"error_msg\"]).to.eql(msg);      //pm.expect()是断言方法；jsonData是前面声明的响应内容通过键来获取value；msg前面声明的参数化csv中的内容",
+							"    }else{",
+							"        pm.expect(jsonData['topic_id'].length).to.eql(24)   //通过length来计算出topic_id的值长度来做判断",
+							"pm.globals.set(\"variable_key\", \"variable_value\");",
+							"    }",
+							"    ",
+							"});",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"accesstoken\": \"{{accessToken}}\",\n\t\"title\":\"{{title}}\",\n\t\"tab\":\"{{tab}}\",\n\t\"content\":\"{{content}}\"\n}"
+				},
+				"url": {
+					"raw": "{{test_url}}/topics",
+					"host": [
+						"{{test_url}}"
+					],
+					"path": [
+						"topics"
+					]
+				},
+				"description": "参数化"
+			},
+			"response": []
+		}
+	]
+}
