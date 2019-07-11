@@ -25,10 +25,12 @@
 							"var msg = pm.variables.get(\"except_msg\")    //var是js声明变量的关键字,获取参数化csv文件中的内容",
 							"console.log(\"msg\", msg)     //js打印方法是console.log()",
 							"",
-							"",
+							"var success = pm.variables.get(\"success\")",
+							"console.log(\"success\")",
 							"",
 							"pm.test(\"断言状态码\"+status_code, function () {",
 							"    pm.response.to.have.status(status_code);",
+							"    console.log(\"status_code==\", typeof(status_code))       //typeof(变量)是判断变量的类型",
 							"});",
 							"",
 							"pm.globals.set(\"variable_key\", \"variable_value\");",
@@ -40,11 +42,15 @@
 							"        pm.expect(jsonData[\"error_msg\"]).to.eql(msg);      //pm.expect()是断言方法；jsonData是前面声明的响应内容通过键来获取value；msg前面声明的参数化csv中的内容",
 							"    }else{",
 							"        pm.expect(jsonData['topic_id'].length).to.eql(24)   //通过length来计算出topic_id的值长度来做判断",
-							"pm.globals.set(\"variable_key\", \"variable_value\");",
 							"    }",
 							"    ",
 							"});",
 							"",
+							"pm.test(\"断言success\",function(){",
+							"    var jsonData = pm.response.json();",
+							"    let bool = success == \"true\" ? true : false;",
+							"    pm.expect(jsonData[\"success\"]).to.eql(bool);",
+							"});",
 							"",
 							""
 						],
@@ -58,8 +64,8 @@
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"type": "text",
+						"value": "application/json"
 					}
 				],
 				"body": {
